@@ -1,5 +1,5 @@
 # Projection-pursuit
-Code for performing various projection pursuit routines
+Code for performing various projection pursuit routines.
 
 See papers:
 https://doi.org/10.1016/j.aca.2011.08.006
