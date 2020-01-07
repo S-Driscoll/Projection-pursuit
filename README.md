@@ -1,4 +1,4 @@
-### Kurtosis Projection Pursuit
+### Kurtosis-Based Projection Pursuit
 `projpursuit.m` is a MATLAB function to perform kurtosis-based projection pursuit.
 
 Literature
