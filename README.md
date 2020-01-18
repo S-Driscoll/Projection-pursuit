@@ -1,6 +1,8 @@
 ### Kurtosis-Based Projection Pursuit
 `projpursuit.m` is a MATLAB function to perform kurtosis-based projection pursuit.
 
+`projpurtsuit.py` is a Python function that is more or less a line by line port of the MATLAB function. `kurtosis.py` is a python implementation of the MATLAB function `kurtosis.m`. A list of dependencies to run the `projpursuit.py` are found in `dependencies.txt`. 
+
 Literature
 ----------
 
