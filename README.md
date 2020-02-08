@@ -59,5 +59,6 @@ xlabel('PP Score 1')
 ylabel('PP Score 2')
 zlabel('PP Score 3')
 ```
-PCA is able to reveal 3 clusters, where 2 clusters correspond to 2 distinct classes and the 3rd is an overlap of the remaining two classes. Let
+![PCA vs PPA](https://github.com/S-Driscoll/Projection-pursuit/blob/master/common/images/PCA_PPA.PNG)
 
+While PCA reveals 3 clusters corresponding to 2 distinct classes and 2 overlapping classes, PPA is able to reveal 4 distinct clusters corresponding to the 4 different classes.
