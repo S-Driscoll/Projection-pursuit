@@ -160,7 +160,7 @@ def projpursuit(X: ndarray = None, **kwargs) -> [ndarray, ndarray, dict]:
     #                             Version 1.0
     #
     # Original algorithms written by Siyuan Hou.
-    # Additional modifications made by Peter Wentzell and Chelsi Wicks.
+    # Additional modifications made by Peter Wentzell, Steve Drisoll, Bonnie Russell, Chelsi Wicks.
     # Python conversion by Bonnie Russell
     #
 
