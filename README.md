@@ -20,7 +20,7 @@ Literature
 * [Projection pursuit and PCA associated with near and middle infrared hyperspectral images to investigate forensic cases of fraudulent documents (2017)](https://doi.org/10.1016/j.microc.2016.10.024)
 * [Sparse Projection Pursuit Analysis: An Alternative for Exploring Multivariate Chemical Data (2020)](https://pubs.acs.org/doi/abs/10.1021/acs.analchem.9b03166)
 
-Examples
+Example
 ----------
 
 Of course, the data being explored does not have to be chemical in nature... the PPA framework can be applied to any multivariate data set. In this example, we will apply it to a subset of [The AT&T face data set](https://git-disl.github.io/GTDLBench/datasets/att_face_dataset/). This subset consists of 4 classes (people) each with 10 different grayscale images of their face (112 x 92 pixels). All images were vectorized along the row direction (112 x 92 --> 1 x 10304) producing a 40 x 10304 data set X which was then column mean-centered. Let's apply PCA and PPA and plot the first two scores vectors:
