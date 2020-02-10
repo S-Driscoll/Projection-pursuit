@@ -1,7 +1,12 @@
 Kurtosis-based Projection Pursuit
 ======
 
-Kurtosis-based projection pursuit analysis (PPA) was developed as an alternative exploratory data analysis algorithm. Instead of using variance and distance metrics to obtain, hopefully, informative projections of high-dimensional data (like PCA, HCA, and kNN), PPA searches for interesting projections by optimizing kurtosis. This repository contains MATLAB and Python code to perform PPA, published literature involving the on-going development of PPA, as well as some examples of how to apply apply PPA to uncover interesting projections in high-dimensional data.
+Kurtosis-based projection pursuit analysis (PPA) was developed as an alternative exploratory data analysis algorithm. Instead of using variance and distance metrics to obtain, hopefully, informative projections of high-dimensional data (like PCA, HCA, and kNN), PPA searches for interesting projections by optimizing kurtosis. This repository contains MATLAB and Python code to perform PPA, published literature involving the on-going development of PPA, as well as some examples of how to apply apply PPA to uncover interesting projections in high-dimensional data. Below is a figure from our recent paper that I think demonstrates the value of searching for distributions with low kurtosis values.
+
+<h1 align="center">
+<img src="https://S-Driscoll.github.io/img/dist.png" alt="kurtosis" width="500"/>
+</h1>
+
 
 MATLAB and Python Functions 
 ----------
