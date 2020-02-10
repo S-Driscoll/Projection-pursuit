@@ -28,6 +28,9 @@ Literature
 Example
 ----------
 
+### Wood Identification using Near-infrared Spectroscopy
+To be completed.
+### Unsupervised Facial Recognition
 Of course, the data being explored does not have to be chemical in nature... the PPA framework can be applied to any multivariate data set. In this example, we will apply it to a subset of [The AT&T face data set](https://git-disl.github.io/GTDLBench/datasets/att_face_dataset/). This subset consists of 4 classes (people) each with 10 different grayscale images of their face (112 x 92 pixels). All images were vectorized along the row direction (112 x 92 --> 1 x 10304) producing a 40 x 10304 data set X which was then column mean-centered. Let's apply PCA and PPA and plot the first two scores vectors:
 
 ```matlab
