@@ -25,7 +25,7 @@ Literature
 * [Projection pursuit and PCA associated with near and middle infrared hyperspectral images to investigate forensic cases of fraudulent documents (2017)](https://doi.org/10.1016/j.microc.2016.10.024)
 * [Sparse Projection Pursuit Analysis: An Alternative for Exploring Multivariate Chemical Data (2020)](https://pubs.acs.org/doi/abs/10.1021/acs.analchem.9b03166)
 
-Example
+Examples
 ----------
 
 ### Wood Identification using Near-infrared Spectroscopy
@@ -39,7 +39,7 @@ Xm = X - mean(X);
 [U, S, V] = svds(Xm, 2);
 T_PCA = U*S;
 
-% PPA of mean centered data using PCA compression (15 components) to avoid PPA finding spurious low kurtosis values
+% PPA of mean centered data using PCA compression (15 components) to avoid PPA finding spurious low kurtosis
 [U, S, V] = svds(Xm, 15);
 [T_PPA] = projpursuit(U*S,2)
 
