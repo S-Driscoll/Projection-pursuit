@@ -45,8 +45,38 @@ Xm = X - mean(X);
 % PCA of mean centered data via singular value decomposition
 [U, S, V] = svds(Xm, 2);
 T_PCA = U*S;
+
+% PPA of mean centered data with dim = 2 and number of initial guesses equal to 1000
+[T_PPA] = projpursuit(Xm, 2, 1000)
+
+% Class vector
+class = class_rep;
+
+% Colour vector for plotting
+cvec = ['b' 'k' 'r' 'g'];
+
+% Plot the PCA scores
+figure
+for i=1:length(T_PCA)
+   scatter(T_PCA(i,1), T_PCA(i,2), 300, cvec(class(i)), 'filled', 'MarkerEdgeColor','black') 
+    hold on
+end
+set(gca,'linewidth',2,'FontSize',14)
+xlabel('PCA Score 1')
+ylabel('PCA Score 2')
+
+% Plot the PPA scores
+figure
+for i=1:length(T_PPA)
+   scatter(T_PPA(i,1),T_PPA(i,2),300,cvec(class(i)),'filled','MarkerEdgeColor','black') 
+    hold on
+end
+set(gca,'linewidth',2,'FontSize',14)
+xlabel('PP Score 1')
+ylabel('PP Score 2')
 ```
 
+![PCA vs PPA](https://github.com/S-Driscoll/Projection-pursuit/blob/master/common/images/wood.PNG)
 
 ### Unsupervised Facial Recognition using Univariate PPA
 Of course, the data being explored does not have to be chemical in nature... the PPA framework can be applied to any multivariate data set. In this example, we will apply it to a subset of [The AT&T face data set](https://git-disl.github.io/GTDLBench/datasets/att_face_dataset/). This subset consists of 4 classes (people) each with 10 different grayscale images of their face (112 x 92 pixels). All images were vectorized along the row direction (112 x 92 --> 1 x 10304) producing a 40 x 10304 data set X which was then column mean-centered. Let's apply PCA and PPA and plot the first two scores vectors:
