@@ -45,7 +45,7 @@ Xm = X - mean(X);
 % PCA of mean centered data via singular value decomposition
 [U, S, V] = svds(Xm, 2);
 T_PCA = U*S;
-
+```
 
 
 ### Unsupervised Facial Recognition using Univariate PPA
