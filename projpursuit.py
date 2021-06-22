@@ -142,7 +142,7 @@ def projpursuit(X: ndarray = None, **kwargs) -> [ndarray, ndarray, dict]:
     #      for recentered algorithms, and the shifted algorithm may still be
     #      implemented if solutions become unstable.
 
-    ##
+    #
     #                             Version 1.0
     #
     # Original algorithms written by Siyuan Hou.
@@ -150,7 +150,7 @@ def projpursuit(X: ndarray = None, **kwargs) -> [ndarray, ndarray, dict]:
     # Python conversion by Bonnie Russell
     #
 
-    ## Set Default Parameters
+    # Set Default Parameters
     MaxMin = kwargs.get("MaxMin", "min").lower()
     StSh = kwargs.get("StSh", "sh").lower()
     VSorth = kwargs.get("VSorth", "so").lower()
@@ -161,7 +161,7 @@ def projpursuit(X: ndarray = None, **kwargs) -> [ndarray, ndarray, dict]:
     convlimit = kwargs.get("convlimit", 1e-10)
     ppout = {"W": [], "P": [], "Mu": []}
 
-    ## Check for valid inputs and parse as required
+    # Check for valid inputs and parse as required
     if X is None:
         raise Exception("PP:DefineVar:X: Provide data matrix X")
     elif type(X) != ndarray or X.dtype != dtype(float):
@@ -246,12 +246,12 @@ def projpursuit(X: ndarray = None, **kwargs) -> [ndarray, ndarray, dict]:
     return T, V, ppout
 
 
-## Original Univariate Kurtosis Projection Pursuit Algorithm
+# Original Univariate Kurtosis Projection Pursuit Algorithm
 def okurtpp(X, p, guess, MaxMin, StSh, VSorth="SO", convlimit=1e-10):
     """Returns (T,V,W,P,kurtObj,convFlag)"""
-    ## Quasi-power methods to optimize univariate kurtosis
+    # Quasi-power methods to optimize univariate kurtosis
     #
-    ##
+    #
     # Input:
     #       X:       The data matrix. Rows denote samples, and columns denote variables.
     #       p:       The number of projection vectors to be extracted.
@@ -288,7 +288,7 @@ def okurtpp(X, p, guess, MaxMin, StSh, VSorth="SO", convlimit=1e-10):
     #       kurtObj:  Kurtosis values for different initial guesses.
     #       convFlag: Convergence status for different initial guesses.
 
-    ## Note:
+    # Note:
     #
     # The scores orthogonality is based on mean-centered data. If the data
     # are not mean-centered, the mean scores are added to the final scores and
@@ -305,7 +305,6 @@ def okurtpp(X, p, guess, MaxMin, StSh, VSorth="SO", convlimit=1e-10):
     # reported in the literature: S. Hou, and P. D. Wentzell, Fast and Simple
     # Methods for the Optimization of Kurtosis Used # as a Projection Pursuit
     # Index, Analytica Chimica Acta, 704 (2011) 1-15.
-    ##
     if VSorth.upper() not in ["VO", "SO"]:
         raise Exception(
             "Please correctly choose the orthogonality of scores or projection vectors."
@@ -316,7 +315,7 @@ def okurtpp(X, p, guess, MaxMin, StSh, VSorth="SO", convlimit=1e-10):
     else:
         raise Exception('Please correctly choose "St" or "Sh" method.')
 
-    ##  Mean center the data and reduce the dimensionality of the data
+    #  Mean center the data and reduce the dimensionality of the data
     # if the number of variables is larger than the number of samples.
     Morig = ones([X.shape[0], 1]) @ mean_(X)
     X = X - Morig
@@ -329,12 +328,10 @@ def okurtpp(X, p, guess, MaxMin, StSh, VSorth="SO", convlimit=1e-10):
     X = X[:, 0:rk]
     Worig = Worig[:, 0:rk]
     X0 = X.copy()
-    ## Initial settings
+    # Initial settings
     r, c = X.shape
     maxcount = 10000
-    convFlag = empty(
-        (guess, p), dtype=object
-    )  # matlab cell array rouughly = nump object array
+    convFlag = empty((guess, p), dtype=object)
     kurtObj = zeros((guess, p))
     T = zeros((r, p))
     W = zeros((c, p))
@@ -348,9 +345,7 @@ def okurtpp(X, p, guess, MaxMin, StSh, VSorth="SO", convlimit=1e-10):
         Vj = Vj[:, 0:cc]  # This reduces the dimensionality of the data
         X = X @ Vj  # when deflation is performed.
         if MaxMin.upper() == "MAX":  # Option to search for maxima.
-            invMat2 = atleast_2d(
-                1 / diag(X.T @ X)
-            ).T  # atleast2d and .T creates a nx1 array
+            invMat2 = atleast_2d(1 / diag(X.T @ X)).T
         elif MaxMin.upper() == "MIN":  # Option to search for minima.
             Mat2 = diag_(X.T @ X)
             Mat2 = Mat2.reshape(Mat2.shape[0], 1)
@@ -367,7 +362,7 @@ def okurtpp(X, p, guess, MaxMin, StSh, VSorth="SO", convlimit=1e-10):
         MAX = MaxMin.upper() == "MAX"
         MIN = MaxMin.upper() == "MIN"
 
-        ## Loop for different initial guesses of w
+        # Loop for different initial guesses of w
         for k in range(guess):
             w = random.randn(cc, 1)  # Random initial guess of w for real numbers
             w = w / linalg.norm(w)
@@ -378,7 +373,7 @@ def okurtpp(X, p, guess, MaxMin, StSh, VSorth="SO", convlimit=1e-10):
             while count <= maxcount:
                 count += 1
                 x = X @ w
-                ## Maximum or minimum search
+                # Maximum or minimum search
                 if MAX:  # Option to search for maxima.
                     w = invMat2 * (X.T @ (x * x * x))
                 elif MIN:  # Option to search for minima.
@@ -388,13 +383,13 @@ def okurtpp(X, p, guess, MaxMin, StSh, VSorth="SO", convlimit=1e-10):
                     Mat1 = Mat1.reshape(cc, cc, order="F").copy()
                     tmp = Mat2 * w
                     w = ldiv(Mat1, tmp)
-                ## Test convergence
+                # Test convergence
                 w = w / linalg.norm(w)
                 L1 = (w.T @ oldw1) ** 2
                 if (1 - L1) < convlimit:
                     convFlag[k, j - 1] = "Converged"
                     break  # Exit the "while ... end" loop if converging
-                ## Continue the interation if "break" criterion is not reached
+                # Continue the interation if "break" criterion is not reached
                 if StSh.upper() == "SH":  # Shifted method
                     w = w + 0.5 * oldw1
                     w = w / linalg.norm(w)
@@ -410,9 +405,9 @@ def okurtpp(X, p, guess, MaxMin, StSh, VSorth="SO", convlimit=1e-10):
                 oldw1 = w
             if count > maxcount:
                 convFlag[k, j - 1] = "Not converged"
-            ## Save the projection vectors for different initial guesses
+            # Save the projection vectors for different initial guesses
             wall[:, k] = w[:, 0]
-        ## Find the best solution from different initial guesses
+        # Find the best solution from different initial guesses
         kurtObj[:, j - 1] = kurtosis(X @ wall, 1, 0)
         if (
             MaxMin.upper() == "MAX"
@@ -427,7 +422,7 @@ def okurtpp(X, p, guess, MaxMin, StSh, VSorth="SO", convlimit=1e-10):
         ind = where(kurtObj[:, j - 1] == tem)[0]
         Wj = wall[:, ind]  # Take the best projection vector as the solution.
 
-        ## Deflation of matrix
+        # Deflation of matrix
         if VSorth.upper() == "VO":  # This deflation method makes the
             t = X @ Wj  # projection vectors orthogonal.
             T[:, j - 1] = t[:, 0]
@@ -448,7 +443,7 @@ def okurtpp(X, p, guess, MaxMin, StSh, VSorth="SO", convlimit=1e-10):
             X = (
                 X0 - T @ P.T
             )  # This uses the Gram-Schmidt process for complex-valued vectors
-    ## Transform back into original space
+    # Transform back into original space
     W = Worig @ W  # The projection vector(s) are tranformed into original space.
     if VSorth.upper() == "VO":
         V = W.copy()
@@ -466,16 +461,14 @@ def okurtpp(X, p, guess, MaxMin, StSh, VSorth="SO", convlimit=1e-10):
         T = T / (ones((T.shape[0], 1)) @ tem)  # Adjust T with respect to V
         P = P * (ones((P.shape[0], 1)) @ tem)  # Adjust P with respect to V
     return T, V, W, P, kurtObj, convFlag
-    ## =================== End of the function =======================
-    ##
 
 
-## Original Multivariate Kurtosis Projection Pursuit Algorithm
+# Original Multivariate Kurtosis Projection Pursuit Algorithm
 def mulkurtpp(X, p, guess, MaxMin, StSh, convlimit=1e-10):
     """Returns [T,V,Vall,kurtObj,convFlag]"""
     #
     # Quasi-power method to optimize multivariate kurtosis.
-    ##
+    #
     # Input:
     #       X:      The data matrix.
     #       p:      The dimension of the plane or heperplane (Normally, 2 or 3).
@@ -499,7 +492,7 @@ def mulkurtpp(X, p, guess, MaxMin, StSh, convlimit=1e-10):
     #                 best projection vectors are chosen as the solutions and put in V
     #       kurtObj:  Kurtosis values for different projection vectors.
     #       convFlag: Convergence status for the initial guesses..
-    ##
+    #
     #  Mean center the data and reduce the dimensionality of the data if the number
     #  of variables is larger than the number of samples.
     Morig = ones((X.shape[0], 1)) @ mean_(X)
@@ -510,13 +503,13 @@ def mulkurtpp(X, p, guess, MaxMin, StSh, convlimit=1e-10):
     X = X[:, 0:rk]
     Vorig = Vorig[:, 0:rk]
     r, c = X.shape
-    ##
+
     # Initial settings
     maxcount = 10000
     Vall = empty((1, guess), dtype=object)
     kurtObj = zeros((1, guess))
     convFlag = empty((1, guess), dtype=object)
-    ##
+
     for k in range(guess):
         V = random.randn(c, p)  # Random initial guess of V
         V = orth(V)
@@ -554,7 +547,7 @@ def mulkurtpp(X, p, guess, MaxMin, StSh, convlimit=1e-10):
                 raise Exception(
                     "Please correctly choose to maximize or minimize the kurtosis."
                 )
-            ##
+
             V, TemS, TemV = svd(
                 V, full_matrices=False
             )  # Apply SVD to find an orthonormal basis.
@@ -568,10 +561,10 @@ def mulkurtpp(X, p, guess, MaxMin, StSh, convlimit=1e-10):
         kurtObj[0, k] = r * sum_(
             (sum_((sqrtm(Ainv) @ V.T @ X.T) ** 2, 0)) ** 2, 1
         )  # Calculate kurtosis.
-        ##
+
         U, S, V = svd(X @ V @ V.T)
         Vall[0, k] = Vorig @ V[:, 0:p]
-    ##
+
     if MaxMin.upper() == "MAX":  # Find the best projection vector for maximum search.
         tem = max(kurtObj[0, :])
     elif MaxMin.upper() == "MIN":  # Find the best projection vector for minimum search.
@@ -580,11 +573,9 @@ def mulkurtpp(X, p, guess, MaxMin, StSh, convlimit=1e-10):
     V = Vall[0, ind]  # Store the projection vectors
     T = X @ Vorig.T @ V + Morig @ V  # Calculate the scores.
     return T, V, Vall, kurtObj, convFlag
-    ## =================== End of the function =======================
-    ##
 
 
-## Recentered Univariate Kurtosis Projection Pursuit Algorithm
+# Recentered Univariate Kurtosis Projection Pursuit Algorithm
 def rckurtpp(X, p, guess, VSorth="SO", convlimit=1e-10):
     """Returns [T,V,R,W,P,kurtObj,convFlag]"""
     #
@@ -592,7 +583,6 @@ def rckurtpp(X, p, guess, VSorth="SO", convlimit=1e-10):
     # is proposed as a projection pursuit index in this work, aiming to deal with
     # unbalanced clusters.
     #
-    ##
     # Input:
     #       X:        The data matrix.
     #       p:        The number of projection vectors to be extracted.
@@ -617,12 +607,12 @@ def rckurtpp(X, p, guess, VSorth="SO", convlimit=1e-10):
     #       kurtObj:  Kurtosis values for different initial guesses.
     #       convFlag: Convergence status for different initial guesses.
 
-    ## Note:
+    # Note:
     # Users have the option to make the projection vectors or scores orthogonal.
     # The scores orthogonality is based on mean-centered data. If the data
     # are not mean-centered, the mean scores are added to the final scores and
     # therefore the final scores may not be not orthogonal.
-    ## Author:
+    # Author:
     # S. Hou, University of Prince Edward Island, Charlottetown, PEI, Canada, 2012.
     #
     # This algorithm is based on the Quasi-Power methods. The Quasi-power
@@ -630,13 +620,13 @@ def rckurtpp(X, p, guess, VSorth="SO", convlimit=1e-10):
     # Fast and Simple Methods for the Optimization of Kurtosis Used as a
     # Projection Pursuit Index, Analytica Chimica Acta, 704 (2011) 1-15.
     #
-    ##
+    #
     if VSorth.upper() not in ["VO", "SO"]:
         raise Exception(
             "Please correctly choose the orthogonality of scores or projection vectors."
         )
     #
-    ##  Mean center the data and reduce the dimensionality of the data
+    #  Mean center the data and reduce the dimensionality of the data
     # if the number of variables is larger than the number of samples.
     Morig = mean_(X)
     X = X - ones((X.shape[0], 1)) * Morig
@@ -652,7 +642,7 @@ def rckurtpp(X, p, guess, VSorth="SO", convlimit=1e-10):
     X = X[:, 0:rk]
     Worig = Worig[:, 0:rk]
     X0 = X.copy()
-    ## Initial settings
+    # Initial settings
     r, c = X.shape
     maxcount = 10000
     convFlag = empty((guess, p), dtype=object)
@@ -661,7 +651,7 @@ def rckurtpp(X, p, guess, VSorth="SO", convlimit=1e-10):
     W = zeros((c, p))
     P = zeros((c, p))
     ALPH = zeros((1, p))
-    ##
+
     for j in range(1, p + 1):
         cc = c + 1 - j
         convlimit = convlimit * cc  # Set convergence limit
@@ -692,7 +682,7 @@ def rckurtpp(X, p, guess, VSorth="SO", convlimit=1e-10):
                 Mat1 = ((ones((cc, 1)) @ tem.T) * (tem1)) @ (tem2)
                 Mat2 = tem1 @ tem2
                 w = ldiv(Mat1, (Mat2 @ w))  # updata w
-                ## Test convergence
+                # Test convergence
                 w = w / linalg.norm(w)
                 L1 = (w.T @ oldw1) ** 2
                 if (1 - L1) < convlimit:
@@ -701,17 +691,17 @@ def rckurtpp(X, p, guess, VSorth="SO", convlimit=1e-10):
                 elif count > maxcount:
                     convFlag[k, j - 1] = "Not converged"
                     break  # Exit if reaching the maximum iteration number
-                ## Continue the interation if "break" criterion is not reached
+                # Continue the interation if "break" criterion is not reached
                 L2 = (w.T @ oldw2) ** 2
                 if L2 > L1 and L2 > 0.95:
                     w = w + (random.rand() / 5 + 0.8) * oldw1
                     w = w / linalg.norm(w)
                 oldw2 = oldw1.copy()
                 oldw1 = w.copy()
-            ## Save the projection vectors for different initial guesses
+            # Save the projection vectors for different initial guesses
             wall[:, k] = w[:, 0]
             alphall[0, k] = alph
-        ## Take the best projection vector as the solution
+        # Take the best projection vector as the solution
         kurtObj[:, j - 1] = (
             r
             * sum_((X @ wall - ones((r, 1)) @ alphall) ** 4, axis=0)
@@ -726,7 +716,7 @@ def rckurtpp(X, p, guess, VSorth="SO", convlimit=1e-10):
                 break
         Wj = Wj * signum
         ALPH[0, j - 1] = alphall[0, ind] @ signum
-        ## Deflation of matrix
+        # Deflation of matrix
         if VSorth.upper() == "VO":  # This deflation method makes the
             t = X @ Wj  # projection vectors orthogonal.
             T[:, j - 1] = t[:, 0]
@@ -745,7 +735,7 @@ def rckurtpp(X, p, guess, VSorth="SO", convlimit=1e-10):
             Pj = X.T @ t / (t.T @ t)
             P[:, j - 1] = (Vj @ Pj)[:, 0]
             X = X0 - T @ P.T
-    ## Transform back into original space
+    # Transform back into original space
     W = Worig @ W  # The projection vector(s) are tranformed into original space.
     if VSorth.upper() == "VO":
         V = W.copy()
@@ -765,11 +755,9 @@ def rckurtpp(X, p, guess, VSorth="SO", convlimit=1e-10):
         T = T / (ones((T.shape[0], 1)) * tem)  # Adjust T with respect to V
         P = P * (ones((P.shape[0], 1)) * tem)  # Adjust P with respect to V
     return T, V, R, W, P, kurtObj, convFlag
-    ## =========================== End of the function ============================
-    ##
 
 
-## Recentered Multivariate Kurtosis Projection Pursuit Algorithm
+# Recentered Multivariate Kurtosis Projection Pursuit Algorithm
 def rcmulkurtpp(X, p, guess, convlimit=1e-10):
     """Returns [T,V,R,K,Vall,kurtObj,convFlag]"""
     #
@@ -777,7 +765,7 @@ def rcmulkurtpp(X, p, guess, convlimit=1e-10):
     # used as a project pursuit index. This algorithm aims to deal with
     # unbalanced clusters (multivariate version). The effect of dimension is
     # taken into account by introducing a dimension term in the constraint.
-    ##
+    #
     # Input:
     #       X:      The data matrix. X cannot be singular.
     #       p:      The dimensionality of the plane or heperplane (Normally, 2 or 3).
@@ -793,7 +781,7 @@ def rcmulkurtpp(X, p, guess, convlimit=1e-10):
     #       kurtObj:   Kurtosis values for the projection vectors of different initial guesses.
     #       convFlag: Convergence status for the different initial guesses.
     #
-    ##
+    #
     # This algorithm extends the Quasi-Power methods reported in two papers:
     # (1) S. Hou, and P. D. Wentzell, Fast and Simple Methods for the Optimization
     #     of Kurtosis Used as a Projection Pursuit Index, Analytica Chimica Acta,
@@ -804,20 +792,20 @@ def rcmulkurtpp(X, p, guess, convlimit=1e-10):
     #
     # Author:
     # S. Hou, University of Prince Edward Island, Charlottetown, PEI, Canada, 2014.
-    #
-    ## Mean-center the data
+
+    # Mean-center the data
     n, m = X.shape
     Morig = mean_(X)
     X = X - ones((n, 1)) * Morig
 
-    ## Initial settings
+    # Initial settings
     maxcount = 10000
     Vall = empty((1, guess), dtype=object)
     rall = empty((1, guess), dtype=object)
     kurtObj = zeros((1, guess))
     convFlag = empty((1, guess), dtype=object)
 
-    ## Loop
+    # Loop
     for i in range(guess):
         count = 0
         V = random.randn(m, p)  # Random initial guess of V
@@ -827,7 +815,7 @@ def rcmulkurtpp(X, p, guess, convlimit=1e-10):
         while True:
             count += 1
 
-            ## Update r
+            # Update r
             Y = (X - ones((n, 1)) @ R.T / p) @ V  # Note p is in the denominator
             invPsi = linalg.inv(Y.T @ Y)
             gj = diag_(Y @ invPsi @ Y.T)
@@ -838,7 +826,7 @@ def rcmulkurtpp(X, p, guess, convlimit=1e-10):
             f = sum_(Y.T * (ones((p, 1)) @ gj.T), 1)
             R = R - V @ (ldiv(J, f))  # Newton' method
 
-            ## Update V
+            # Update V
             # Calculate b1 and b2
             XX = X - ones((n, 1)) * R.T  # Note p is not in the denominator
             Z = XX @ V
@@ -893,7 +881,7 @@ def rcmulkurtpp(X, p, guess, convlimit=1e-10):
         Vall[0, i] = Vtem
         rall[0, i] = R.T @ Vtem @ Vtem.T  # r is saved as a row vector now.
 
-    ## Take the best projection vector as the solution
+    # Take the best projection vector as the solution
     tem = kurtObj.min()
     ind = where(kurtObj == tem)[1][0]
     V = Vall[0][ind]
@@ -901,15 +889,13 @@ def rcmulkurtpp(X, p, guess, convlimit=1e-10):
     T = X @ V
     K = kurtObj[0][ind]
 
-    ## Add mean value
+    # Add mean value
     T = (
         T + ones((n, 1)) @ Morig @ V
     )  # Adjust the scores (The scores of mean vector are added).
     R = R + Morig  # Adjust r (mean vector is added).
 
     return T, V, R, K, Vall, kurtObj, convFlag
-
-    ## ============== End of the function =====================
 
 
 def orthbasis(A):
@@ -923,7 +909,6 @@ def orthbasis(A):
     # Output:
     #   V: an orthonormal matrix
 
-    ##
     c = A.shape[1]
     V = zeros(A.shape)
     V[:, 0] = A[:, 0] / linalg.norm(A[:, 0])
