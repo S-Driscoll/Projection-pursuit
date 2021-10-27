@@ -121,4 +121,4 @@ ylabel('PP Score 2')
 
 While PCA reveals 3 clusters corresponding to 2 distinct classes and 2 overlapping classes, PPA is able to reveal 4 distinct clusters corresponding to the 4 different classes.
 
-PPA can also be used to optimize the multivariate kurtosis and the recentered kurtosis. For more information on these options the reader is encouraged to explore the literature linked previously in this repository,
+PPA can also be used to optimize the multivariate kurtosis and the recentered kurtosis. For more information on these options the reader is encouraged to explore the literature linked previously in this repository.
