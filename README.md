@@ -4,7 +4,7 @@ Kurtosis-based Projection Pursuit
 Kurtosis-based projection pursuit analysis (PPA) is an exploratory data analysis algorithm originally developed by Siyuan Hou and Peter Wentzell in 2011 and remains an active research area for the [Wentzell Research Group](http://groupwentzell.chemistry.dal.ca/) at Dalhousie University. Instead of using variance and distance-based metrics to explore high-dimensional data (PCA, HCA etc.), PPA searches for interesting projections by optimizing kurtosis. This repository contains MATLAB and Python code to perform PPA, published literature involving the on-going development of PPA, as well as some examples of how to apply PPA to uncover interesting projections in high-dimensional data. Below is a figure from our recent paper that I think demonstrates the value of searching for distributions with low kurtosis values.
 
 <h1 align="center">
-<img src="https://S-Driscoll.github.io/img/dist.png" alt="kurtosis" width="400"/>
+<img src="https://github.com/S-Driscoll/Projection-pursuit/blob/master/common/images/dist.png" alt="kurtosis" width="400"/>
 </h1>
 
 
